@@ -4,6 +4,8 @@ import { generateCommit } from "@/lib/llm";
 
 export async function POST(req: Request) {
     const { diff } = await req.json();
+    console.log("RECEIVED DIFF:", diff);
+
 
     if (!diff || typeof diff !== "string") {
         return NextResponse.json(

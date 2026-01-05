@@ -16,7 +16,7 @@ export async function generateCommit(diff: string) {
             },
             {
                 role: "user",
-                content: "Analyze this git diff and generate a commit message: \n\n${diff}",
+                content: `Analyze this git diff:\n\n${diff}`,
 
             },
 

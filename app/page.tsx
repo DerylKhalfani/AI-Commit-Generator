@@ -9,23 +9,31 @@ export default function Home() {
   // State holding the generated commit message
   // null means no commit has been generated yet
   const [commit, setCommit] = useState<CommitMessage | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Called when user clicks "Generate"
   // diff will later contain the git diff text
-  const handleGenerate = (diff: string) => {
-    // Mock commit message for Phase 1
-    const mockCommit: CommitMessage = {
-      type: "feat",
-      scope: "auth",
-      subject: "add login support",
-      body: [
-        "Added basic login logic",
-        "Handled user authentication flow",
-      ],
-    };
+  const handleGenerate = async (diff: string) => {
+    setLoading(true)
+    setCommit(null)
+    
+    try {
+      const res = await fetch("/api/generate-commit",
+        {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ diff })
+        }
+      );
 
-    // Save commit message to state
-    setCommit(mockCommit);
+      const data = await res.json();
+      setCommit(data);
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+
   };
 
   return (
